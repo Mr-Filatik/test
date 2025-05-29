@@ -12,7 +12,6 @@ jobs:
       - name: Create checklist comment
         uses: peter-evans/create-or-update-comment@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.pull_request.number }}
           body: |
             ✅ Прежде чем мержить:
