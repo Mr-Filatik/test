@@ -9,16 +9,44 @@ on:
 
 jobs:
   label-pr:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # windows-latest || macos-latest
+    name: Сhanged-files
     steps:
+      - uses: actions/checkout@v4
       - name: Get changed files
-        id: get-changed
-        run: |
-          echo "files=$(git diff --no-index --name-only ${{ github.event.pull_request.base.sha }}...$GITHUB_SHA)" >> $GITHUB_ENV
+        id: changed-files
+        uses: tj-actions/changed-files@v46
+        # To compare changes between the current commit and the last pushed remote commit set `since_last_remote_commit: true`. e.g
+        # with:
+        #   since_last_remote_commit: true 
 
-      - name: Add .github label
-        if: contains(env.files, '.github/')
+      - name: List all changed files
+        env:
+          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+        run: |
+          for file in ${ALL_CHANGED_FILES}; do
+            echo "$file was changed"
+          done
+
+      - name: Add 'github' label
+        if: ${{ steps.changed-files.outputs.any_changed == 'true' }} && ${{ steps.changed-files.outputs.files_in_dot_github }}
         run: |
           gh pr label --add github ${{ github.event.pull_request.html_url }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Add 'migration' label
+        if: ${{ steps.changed-files.outputs.any_changed == 'true' }} && ${{ steps.changed-files.outputs.files_in_migrations }}
+        run: |
+          gh pr label --add migration ${{ github.event.pull_request.html_url }}
+
+      - name: Add 'project' label
+        if: ${{ steps.changed-files.outputs.any_changed == 'true' }} && !steps.changed-files.outputs.files_in_dot_github && !steps.changed-files.outputs.files_in_migrations
+        run: |
+          gh pr label --add project ${{ github.event.pull_request.html_url }}
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+with:
+  filters: |
+    files_in_dot_github = \A.github/
+    files_in_migrations = \Amigrations/
