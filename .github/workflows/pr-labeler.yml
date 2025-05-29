@@ -10,6 +10,7 @@ on:
 jobs:
   label-pr:
     runs-on: ubuntu-latest  # windows-latest || macos-latest
+    permissions: write-all
     name: Сhanged-files
     steps:
       - uses: actions/checkout@v4
@@ -19,6 +20,10 @@ jobs:
         # To compare changes between the current commit and the last pushed remote commit set `since_last_remote_commit: true`. e.g
         # with:
         #   since_last_remote_commit: true 
+        with:
+          filters: |
+            files_in_dot_github = \A.github/
+            files_in_migrations = \Amigrations/
 
       - name: List all changed files
         env:
@@ -42,11 +47,3 @@ jobs:
         if: ${{ steps.changed-files.outputs.any_changed == 'true' }} && !steps.changed-files.outputs.files_in_dot_github && !steps.changed-files.outputs.files_in_migrations
         run: |
           gh pr label --add project ${{ github.event.pull_request.html_url }}
-
-env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-with:
-  filters: |
-    files_in_dot_github = \A.github/
-    files_in_migrations = \Amigrations/
