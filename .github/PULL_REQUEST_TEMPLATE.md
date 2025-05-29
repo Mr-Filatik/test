@@ -9,5 +9,4 @@ Before this pool can be merged, a requester is required:
 - [ ] Successfully pass all tests;
 - [ ] Update documentation.
 
-
 ✅ Only after all items have been passed can you press merge.

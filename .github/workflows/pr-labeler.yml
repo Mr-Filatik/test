@@ -1,0 +1,24 @@
+name: PR Labeler
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+jobs:
+  label-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get changed files
+        id: get-changed
+        run: |
+          echo "files=$(git diff --name-only ${{ github.event.pull_request.base.sha }}...$GITHUB_SHA)" >> $GITHUB_ENV
+
+      - name: Add .github label
+        if: contains(env.files, '.github/')
+        run: |
+          gh pr label --add github ${{ github.event.pull_request.html_url }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
