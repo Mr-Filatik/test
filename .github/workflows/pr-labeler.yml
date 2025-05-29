@@ -36,7 +36,7 @@ jobs:
       - name: Add 'github' label
         if: ${{ steps.changed-files.outputs.any_changed == 'true' }} && ${{ steps.changed-files.outputs.files_in_dot_github }}
         run: |
-          gh pr edit "$PR_URL" --add-label "repository"
+          gh pr edit "$PR_URL" --add-label "type:repository"
         env:
           PR_URL: ${{github.event.pull_request.html_url}}
           GH_TOKEN: ${{ github.token }}
@@ -44,7 +44,7 @@ jobs:
       - name: Add 'migration' label
         if: ${{ steps.changed-files.outputs.any_changed == 'true' }} && ${{ steps.changed-files.outputs.files_in_migrations }}
         run: |
-          gh pr edit "$PR_URL" --add-label "migration"
+          gh pr edit "$PR_URL" --add-label "type:migration"
         env:
           PR_URL: ${{github.event.pull_request.html_url}}
           GH_TOKEN: ${{ github.token }}
@@ -52,7 +52,7 @@ jobs:
       - name: Add 'project' label
         if: ${{ steps.changed-files.outputs.any_changed == 'true' }} && !steps.changed-files.outputs.files_in_dot_github && !steps.changed-files.outputs.files_in_migrations
         run: |
-          gh pr edit "$PR_URL" --add-label "project"
+          gh pr edit "$PR_URL" --add-label "type:project"
         env:
           PR_URL: ${{github.event.pull_request.html_url}}
           GH_TOKEN: ${{ github.token }}
