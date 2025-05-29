@@ -8,10 +8,7 @@ on:
 jobs:
   checklist:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-      repository-projects: write
+    permissions: write-all
     steps:
       - name: Create checklist comment
         uses: peter-evans/create-or-update-comment@v4
@@ -22,4 +19,3 @@ jobs:
             - [ ] Проверить код
             - [ ] Запустить тесты
             - [ ] Обновить документацию
-          reactions: '+1'
