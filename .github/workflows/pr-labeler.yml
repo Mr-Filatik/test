@@ -36,14 +36,14 @@ jobs:
       - name: Add 'github' label
         if: ${{ steps.changed-files.outputs.any_changed == 'true' }} && ${{ steps.changed-files.outputs.files_in_dot_github }}
         run: |
-          gh pr label --add github ${{ github.event.pull_request.html_url }}
+          gh pr edit --add-label github ${{ github.event.pull_request.html_url }}
 
       - name: Add 'migration' label
         if: ${{ steps.changed-files.outputs.any_changed == 'true' }} && ${{ steps.changed-files.outputs.files_in_migrations }}
         run: |
-          gh pr label --add migration ${{ github.event.pull_request.html_url }}
+          gh pr edit --add-label migration ${{ github.event.pull_request.html_url }}
 
       - name: Add 'project' label
         if: ${{ steps.changed-files.outputs.any_changed == 'true' }} && !steps.changed-files.outputs.files_in_dot_github && !steps.changed-files.outputs.files_in_migrations
         run: |
-          gh pr label --add project ${{ github.event.pull_request.html_url }}
+          gh pr edit --add-label project ${{ github.event.pull_request.html_url }}
