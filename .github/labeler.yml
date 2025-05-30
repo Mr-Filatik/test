@@ -1,0 +1,11 @@
+github:
+  - changed-files:
+      - any-glob-to-any-file: '.github/**/*'
+
+actions:
+  - changed-files:
+      - any-glob-to-any-file: '.github/workflows/*'
+
+migrations:
+  - changed-files:
+      - any-glob-to-any-file: 'migrations/**/*'
