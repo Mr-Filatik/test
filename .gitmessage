@@ -1,0 +1,6 @@
+
+
+# these comments won't be commited. They only appear in UI
+# feat(s3): [SRE-123] general commit message
+# chore(route53): [DP-123] starts with lower letter
+# fix(s3): message without task (avoid using this one)
