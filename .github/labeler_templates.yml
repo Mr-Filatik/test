@@ -16,8 +16,8 @@ my-root:
 
 go:
   - changed-files:
-      - any-glob-to-any-file: '**/*'
+      - any-glob-to-any-file: '**/*.go'
 
 csharp:
   - changed-files:
-      - any-glob-to-any-file: '**/*'
+      - any-glob-to-any-file: '**/*.cs'
