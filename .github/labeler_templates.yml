@@ -1,15 +1,23 @@
-github-1:
+github:
   - changed-files:
       - any-glob-to-any-file: '.github/**/*'
 
-actions-1:
+actions:
   - changed-files:
       - any-glob-to-any-file: '.github/workflows/*'
 
-migrations-1:
+migrations:
   - changed-files:
       - any-glob-to-any-file: 'migrations/**/*'
 
-my-root-1:
+my-root:
+  - changed-files:
+      - any-glob-to-any-file: '**/*'
+
+go:
+  - changed-files:
+      - any-glob-to-any-file: '**/*'
+
+csharp:
   - changed-files:
       - any-glob-to-any-file: '**/*'
