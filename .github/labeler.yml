@@ -9,7 +9,3 @@ actions:
 migrations:
   - changed-files:
       - any-glob-to-any-file: 'migrations/**/*'
-
-my-root:
-  - changed-files:
-      - any-glob-to-any-file: '**/*'
