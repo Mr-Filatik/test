@@ -1,0 +1,35 @@
+name: Debug Pull Request Events
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+    branches:
+      - main
+
+jobs:
+  debug-pr-event:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Print Event Info
+        run: |
+          echo "🎯 Event type: ${{ github.event_name }}"
+          echo "🧾 Action: ${{ github.event.action }}"
+          echo "🔢 PR Number: ${{ github.event.pull_request.number }}"
+          echo "🧑 Author: ${{ github.event.pull_request.user.login }}"
+          echo "📦 Head branch: ${{ github.event.pull_request.head.ref }}"
+          echo "📦 Base branch: ${{ github.event.pull_request.base.ref }}"
+          echo "📅 Created at: ${{ github.event.pull_request.created_at }}"
+          echo "📝 Title: ${{ github.event.pull_request.title }}"
+          echo "🔗 URL: ${{ github.event.pull_request.html_url }}"
+
+      - name: Show full event JSON (for debugging)
+        run: |
+          echo "$GITHUB_EVENT_PATH = ${{ env.GITHUB_EVENT_PATH }}"
+          cat $GITHUB_EVENT_PATH | jq .
+        shell: bash
