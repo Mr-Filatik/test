@@ -1,0 +1,60 @@
+name: Auto Create Pull Request
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+jobs:
+  auto_pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Git CLI
+        uses: actions/setup-git@v3
+
+      - name: Checkout default branch
+        uses: actions/checkout@v3
+        with:
+          ref: test
+
+      - name: Fetch all branches
+        run: git fetch origin master test
+
+      - name: Compare commits
+        id: compare
+        run: |
+          TEST_SHA=$(git rev-parse origin/test)
+          MASTER_SHA=$(git rev-parse origin/master)
+
+          if [ "$TEST_SHA" != "$MASTER_SHA" ]; then
+            echo "::set-output name=changes::true"
+          else
+            echo "::set-output name=changes::false"
+          fi
+        shell: bash
+
+      - name: Check existing PRs
+        if: steps.compare.outputs.changes == 'true'
+        id: check_pr
+        run: |
+          PR_EXISTS=$(gh pr list --head test --base master --json number --jq length)
+          if [ "$PR_EXISTS" -eq "0" ]; then
+            echo "::set-output name=pr_needed::true"
+          else
+            echo "::set-output name=pr_needed::false"
+          fi
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create PR
+        if: steps.compare.outputs.changes == 'true' && steps.check_pr.outputs.pr_needed == 'true'
+        run: |
+          gh pr create \
+            --title "Auto PR: test -> master" \
+            --body "Автоматически создано после обнаружения изменений в test" \
+            --head test \
+            --base master \
+            --label automated
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
