@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup Git CLI
-        uses: actions/setup-git@v3
+        uses: actions/setup-git@v5
 
       - name: Checkout default branch
         uses: actions/checkout@v3
